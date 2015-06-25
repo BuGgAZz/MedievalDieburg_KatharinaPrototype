@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using Vuforia;
 
-public class GameLogic : MonoBehaviour 
+public class GameLogic : MonoBehaviour
 {
 
 
@@ -100,6 +101,6 @@ public class GameLogic : MonoBehaviour
 
 	public void AdjustModelPositionOnExtendedTarcking()
 	{
-
+	
 	}
 }

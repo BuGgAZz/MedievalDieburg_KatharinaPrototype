@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 
 
 public class GPSBubble 
 {
+
+	public GameObject[] Scenes;
 
 	private string 	m_name;
 	private double 	m_longitude;
@@ -13,6 +16,7 @@ public class GPSBubble
 	private double 	m_radius;
 
 	private bool	m_playerInBubble;
+
 	#region Variablen Getter
 	public string Name
 	{
@@ -52,6 +56,7 @@ public class GPSBubble
 			return m_radius;
 		}
 	}
+	#endregion 
 
 	public GPSBubble(string name, double lat, double lng, float alt, double r)
 	{
@@ -61,32 +66,35 @@ public class GPSBubble
 		m_altitude 	=	alt;
 		m_radius 	= 	r;
 	}
-	#endregion 
 
-	void OnEnable()
+
+	private void OnEnable()
 	{
-		EventManager.OnPlayerEnter 	+= 	ProjectScene;
-		EventManager.OnPlayerExit 	+=	StopProjectScene;
+		EventManager.PlayerEnter += ProjectScene;
+		EventManager.PlayerExit += StopProjectScene;
 	}
 
-	void OnDisable()
+	private void OnDisable()
 	{
-		EventManager.OnPlayerEnter 	-= 	ProjectScene;
-		EventManager.OnPlayerExit 	-=	StopProjectScene;
+		EventManager.PlayerEnter -= ProjectScene;
+		EventManager.PlayerExit -= StopProjectScene;
+	}
+	
+	private void DetermineProjectedScene()
+	{
+		switch (m_name) 
+		{
+		case "Garten"	: /* GartenSceneLaden*/ ; break;
+		case "Hof" 		: /* HofSceneLaden*/	; break; 
+		}
 	}
 
-	void CkeckForPlayerCoordinates()
-	{
-		//Envoke OnPlayerEnter & OnPlayerExit here
-
-	}
-
-	void ProjectScene()
+	public static void ProjectScene(object sender, EventArgs e)
 	{
 
 	}
 
-	void StopProjectScene()
+	public static void StopProjectScene(object sender, EventArgs e)
 	{
 
 	}
