@@ -15,7 +15,7 @@ public class GPSBubble
 	private float 	m_altitude;
 	private double 	m_radius;
 
-	private bool	m_playerInBubble;
+	private bool	m_isActive;
 
 	#region Variablen Getter
 	public string Name
@@ -56,6 +56,18 @@ public class GPSBubble
 			return m_radius;
 		}
 	}
+
+	public bool IsActive
+	{
+		get
+		{
+			return m_isActive;
+		}
+		set
+		{
+			m_isActive = IsActive;
+		}
+	}
 	#endregion 
 
 	public GPSBubble(string name, double lat, double lng, float alt, double r)
@@ -80,22 +92,28 @@ public class GPSBubble
 		EventManager.PlayerExit -= StopProjectScene;
 	}
 	
-	private void DetermineProjectedScene()
+	private void DetermineProjectedScene(string activeBubble)
 	{
-		switch (m_name) 
+		switch (activeBubble) 
 		{
 		case "Garten"	: /* GartenSceneLaden*/ ; break;
 		case "Hof" 		: /* HofSceneLaden*/	; break; 
 		}
 	}
 
-	public static void ProjectScene(object sender, EventArgs e)
+	public void ProjectScene(object sender, EventArgs e)
 	{
-
+		if (m_isActive) 
+		{
+			Scene.GetComponent<Renderer> ().enabled = true;
+		}
 	}
 
-	public static void StopProjectScene(object sender, EventArgs e)
-	{
-
+	public void StopProjectScene(object sender, EventArgs e)
+	{	
+		if (m_isActive) 
+		{
+			Scene.GetComponent<Renderer> ().enabled = false;
+		}
 	}
 }

@@ -431,6 +431,8 @@ ModelImporter:
     100850: WALL__3__L_2
     100852: WALL__3__L_3
     100854: WALL__3__L_4
+    100856: "W\xFCrfel"
+    100858: "W\xFCrfel_1"
     400000: 1ST_FLOOR
     400002: BACK
     400004: BACK_2
@@ -859,6 +861,8 @@ ModelImporter:
     400850: WALL__3__L_2
     400852: WALL__3__L_3
     400854: WALL__3__L_4
+    400856: "W\xFCrfel"
+    400858: "W\xFCrfel_1"
     2300000: CORNER_L_2
     2300002: CORNER_L_4
     2300004: CORNER_L_6
@@ -1157,6 +1161,8 @@ ModelImporter:
     2300590: TorR_2
     2300592: W__rfel
     2300594: W__rfel_1
+    2300596: "W\xFCrfel"
+    2300598: "W\xFCrfel_1"
     3300000: CORNER_L_2
     3300002: CORNER_L_4
     3300004: CORNER_L_6
@@ -1455,6 +1461,8 @@ ModelImporter:
     3300590: TorR_2
     3300592: W__rfel
     3300594: W__rfel_1
+    3300596: "W\xFCrfel"
+    3300598: "W\xFCrfel_1"
     4300000: crown_3
     4300002: crown_2
     4300004: crown_1
@@ -1753,6 +1761,8 @@ ModelImporter:
     4300590: T_rrahmen_2
     4300592: Mauer__Tor__2
     4300594: Tor_2
+    4300596: "W\xFCrfel_1"
+    4300598: "W\xFCrfel"
     9500000: //RootNode
   materials:
     importMaterials: 1
