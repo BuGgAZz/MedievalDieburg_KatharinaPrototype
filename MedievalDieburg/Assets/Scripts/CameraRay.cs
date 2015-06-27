@@ -20,7 +20,7 @@ public class CameraRay : MonoBehaviour {
 				{
 					Inventory.freeSpace--;
 					Inventory.Items.Add(hit.collider.gameObject.GetComponent<Item>());
-					hit.collider.gameObject.GetComponent<MeshRenderer>().enabled = false;
+					Destroy(hit.collider.gameObject);
 				}
 			}
 		}

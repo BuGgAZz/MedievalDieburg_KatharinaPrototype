@@ -9,10 +9,12 @@ public class GameLogic : MonoBehaviour
 
 	public float PlayerLat;
 	public float PlayerLng;
-
+	
 	private GPSBubble[] m_Bubbles;
 	private bool m_playerInBubble;
 	private string m_activeBubble;
+	private bool m_InvIsOnScreen = false;
+	
 	Text InfoGPSBubble;
 	Text InfoLat;
 	Text InfoLng;
@@ -20,10 +22,28 @@ public class GameLogic : MonoBehaviour
 	Text InfoPosGarten;
 	Text InfoPosHof;
 	Text InventoryCounter;
-	Image InventoryItem0Image;
-	Image InventoryItem1Image;
+	
+	UnityEngine.UI.Image InventoryItem0Image;
+	UnityEngine.UI.Image InventoryItem1Image;
+	UnityEngine.UI.Image InventoryItem2Image;
+	UnityEngine.UI.Image InventoryItem3Image;
+	UnityEngine.UI.Image InventoryItem4Image;
+	UnityEngine.UI.Image InventoryItem5Image;
+	UnityEngine.UI.Image InventoryItem6Image;
+	UnityEngine.UI.Image InventoryItem7Image;
+	UnityEngine.UI.Image InventoryItem8Image;
+
 	Text InventoryItem0Text;
 	Text InventoryItem1Text;
+	Text InventoryItem2Text;
+	Text InventoryItem3Text;
+	Text InventoryItem4Text;
+	Text InventoryItem5Text;
+	Text InventoryItem6Text;
+	Text InventoryItem7Text;
+	Text InventoryItem8Text;
+	
+	Animation InventoryToggleAni;
 
 	public bool PlayerInBubble
 	{
@@ -98,11 +118,29 @@ public class GameLogic : MonoBehaviour
 		InfoInBubble 	= GameObject.Find ("InBubble").GetComponent<Text> ();
 		InfoPosGarten 	= GameObject.Find ("PosGarten").GetComponent<Text> ();
 		InfoPosHof		= GameObject.Find("PosHof").GetComponent<Text>();
-		InventoryCounter= GameObject.Find("InventoryCounter").GetComponent<Text>();
-		InventoryItem0Image = GameObject.Find("InventoryItem0").GetComponent<Image>();
-		InventoryItem1Image = GameObject.Find("InventoryItem1").GetComponent<Image>();
+		
+		InventoryCounter    = GameObject.Find("InventoryCounter").GetComponent<Text>();
+		InventoryItem0Image = GameObject.Find("InventoryItem0").GetComponent<UnityEngine.UI.Image>();
+		InventoryItem1Image = GameObject.Find("InventoryItem1").GetComponent<UnityEngine.UI.Image>();
+		InventoryItem2Image = GameObject.Find("InventoryItem2").GetComponent<UnityEngine.UI.Image>();
+		InventoryItem3Image = GameObject.Find("InventoryItem3").GetComponent<UnityEngine.UI.Image>();
+		InventoryItem4Image = GameObject.Find("InventoryItem4").GetComponent<UnityEngine.UI.Image>();
+		InventoryItem5Image = GameObject.Find("InventoryItem5").GetComponent<UnityEngine.UI.Image>();
+		InventoryItem6Image = GameObject.Find("InventoryItem6").GetComponent<UnityEngine.UI.Image>();
+		InventoryItem7Image = GameObject.Find("InventoryItem7").GetComponent<UnityEngine.UI.Image>();
+		InventoryItem8Image = GameObject.Find("InventoryItem8").GetComponent<UnityEngine.UI.Image>();
+		
 		InventoryItem0Text = GameObject.Find("InventoryItem0").GetComponentInChildren<Text>();
 		InventoryItem1Text = GameObject.Find("InventoryItem1").GetComponentInChildren<Text>();
+		InventoryItem2Text = GameObject.Find("InventoryItem2").GetComponentInChildren<Text>();
+		InventoryItem3Text = GameObject.Find("InventoryItem3").GetComponentInChildren<Text>();
+		InventoryItem4Text = GameObject.Find("InventoryItem4").GetComponentInChildren<Text>();
+		InventoryItem5Text = GameObject.Find("InventoryItem5").GetComponentInChildren<Text>();
+		InventoryItem6Text = GameObject.Find("InventoryItem6").GetComponentInChildren<Text>();
+		InventoryItem7Text = GameObject.Find("InventoryItem7").GetComponentInChildren<Text>();
+		InventoryItem8Text = GameObject.Find("InventoryItem8").GetComponentInChildren<Text>();
+		
+		InventoryToggleAni = GameObject.Find("Inventory").GetComponent<Animation>();
 	}
 
 	private void PrintInfo()
@@ -119,20 +157,69 @@ public class GameLogic : MonoBehaviour
 		{
 			for(int i = 0; i < Inventory.Items.Count; i++ )
 			{
-				if(i == 0)
+				switch (i)
 				{
-					InventoryItem0Image.overrideSprite =(Sprite)Inventory.Items[0].item_icon;
-					InventoryItem0Text.text = Inventory.Items[0].item_name;
+					case 0:
+					InventoryItem0Image.overrideSprite =(Sprite)Inventory.Items[i].item_icon;
+					InventoryItem0Text.text = Inventory.Items[i].item_name;
+					break;
+					case 1:
+					InventoryItem1Image.overrideSprite =(Sprite)Inventory.Items[i].item_icon;
+					InventoryItem1Text.text = Inventory.Items[i].item_name;
+					break;
+					case 2:
+					InventoryItem2Image.overrideSprite =(Sprite)Inventory.Items[i].item_icon;
+					InventoryItem2Text.text = Inventory.Items[i].item_name;
+					break;
+					case 3:
+					InventoryItem3Image.overrideSprite =(Sprite)Inventory.Items[i].item_icon;
+					InventoryItem3Text.text = Inventory.Items[i].item_name;
+					break;
+					case 4:
+					InventoryItem4Image.overrideSprite =(Sprite)Inventory.Items[i].item_icon;
+					InventoryItem4Text.text = Inventory.Items[i].item_name;
+					break;
+					case 5:
+					InventoryItem5Image.overrideSprite =(Sprite)Inventory.Items[i].item_icon;
+					InventoryItem5Text.text = Inventory.Items[i].item_name;
+					break;
+					case 6:
+					InventoryItem6Image.overrideSprite =(Sprite)Inventory.Items[i].item_icon;
+					InventoryItem6Text.text = Inventory.Items[i].item_name;
+					break;
+					case 7:
+					InventoryItem7Image.overrideSprite =(Sprite)Inventory.Items[i].item_icon;
+					InventoryItem7Text.text = Inventory.Items[i].item_name;
+					break;
+					case 8:
+					InventoryItem8Image.overrideSprite =(Sprite)Inventory.Items[i].item_icon;
+					InventoryItem8Text.text = Inventory.Items[i].item_name;
+					break;
 				}
-				if(i == 1)
-				{
-					InventoryItem1Image.overrideSprite = (Sprite)Inventory.Items[1].item_icon;
-					InventoryItem1Text.text = Inventory.Items[1].item_name;
-				}
+
 			}
 		}
 	}
+	public void ToggleInventory()
+	{
 
+		if(!m_InvIsOnScreen)
+		{
+			print ("play ani fwd");
+			InventoryToggleAni["InventoryAni"].speed = 1;
+			InventoryToggleAni["InventoryAni"].time = 0;
+			InventoryToggleAni.Play();
+		}
+		else
+		{
+			print ("play ani bwd");
+			InventoryToggleAni["InventoryAni"].speed = -1;
+			InventoryToggleAni["InventoryAni"].time = InventoryToggleAni.clip.length;
+			InventoryToggleAni.Play();
+		}
+		
+		m_InvIsOnScreen = !m_InvIsOnScreen;
+	}
 
 	public void QuitApp()
 	{
