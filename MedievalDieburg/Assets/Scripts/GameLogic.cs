@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using Vuforia;
 
-public class GameLogic : MonoBehaviour 
+public class GameLogic : MonoBehaviour
 {
 
 
@@ -44,17 +45,7 @@ public class GameLogic : MonoBehaviour
 	{
 		registerGPSBubbles ();
 		m_playerInBubble = true;
-		InfoGPSBubble 	= GameObject.Find ("InfoGPSBubble").GetComponent<Text> ();
-		InfoLat 		= GameObject.Find ("InfoLatitude").GetComponent<Text> ();
-		InfoLng 		= GameObject.Find ("InfoLongitude").GetComponent<Text> ();
-		InfoInBubble 	= GameObject.Find ("InBubble").GetComponent<Text> ();
-		InfoPosGarten 	= GameObject.Find ("PosGarten").GetComponent<Text> ();
-		InfoPosHof		= GameObject.Find("PosHof").GetComponent<Text>();
-		InventoryCounter= GameObject.Find("InventoryCounter").GetComponent<Text>();
-		InventoryItem0Image = GameObject.Find("InventoryItem0").GetComponent<Image>();
-		InventoryItem1Image = GameObject.Find("InventoryItem1").GetComponent<Image>();
-		InventoryItem0Text = GameObject.Find("InventoryItem0").GetComponentInChildren<Text>();
-		InventoryItem1Text = GameObject.Find("InventoryItem1").GetComponentInChildren<Text>();
+		RegisterUICanvasElements ();
 	}
 
 	void Update()
@@ -69,6 +60,13 @@ public class GameLogic : MonoBehaviour
 		m_Bubbles [0] 	= new GPSBubble ("TestBubbleUni", 49.903020d, 8.858752d, 0f, 0.00002d);
 		m_Bubbles [1] 	= new GPSBubble ("Garten", 49.900476d, 8.845070d, 0f, 0.0002d);
 		m_Bubbles [2]	= new GPSBubble ("Hof", 49.900393d, 8.844850d, 0f, 0.00006d); 
+
+		foreach (GPSBubble bubble in m_Bubbles) 
+		{
+			//each bubble gets the same scene for testing purposes only
+			// this will be handled by the scene manager in the future
+			bubble.Scene = Resources.Load("Prefabs/MarktplatzSzene") as GameObject;
+		}
 	}
 
 	private void CheckPlayerPosition()
@@ -90,6 +88,21 @@ public class GameLogic : MonoBehaviour
 				m_playerInBubble = false;
 			}
 		}
+	}
+
+	private void RegisterUICanvasElements()
+	{
+		InfoGPSBubble 	= GameObject.Find ("InfoGPSBubble").GetComponent<Text> ();
+		InfoLat 		= GameObject.Find ("InfoLatitude").GetComponent<Text> ();
+		InfoLng 		= GameObject.Find ("InfoLongitude").GetComponent<Text> ();
+		InfoInBubble 	= GameObject.Find ("InBubble").GetComponent<Text> ();
+		InfoPosGarten 	= GameObject.Find ("PosGarten").GetComponent<Text> ();
+		InfoPosHof		= GameObject.Find("PosHof").GetComponent<Text>();
+		InventoryCounter= GameObject.Find("InventoryCounter").GetComponent<Text>();
+		InventoryItem0Image = GameObject.Find("InventoryItem0").GetComponent<Image>();
+		InventoryItem1Image = GameObject.Find("InventoryItem1").GetComponent<Image>();
+		InventoryItem0Text = GameObject.Find("InventoryItem0").GetComponentInChildren<Text>();
+		InventoryItem1Text = GameObject.Find("InventoryItem1").GetComponentInChildren<Text>();
 	}
 
 	private void PrintInfo()
@@ -120,14 +133,14 @@ public class GameLogic : MonoBehaviour
 		}
 	}
 
+
 	public void QuitApp()
 	{
 		Application.Quit ();
-		print ("This should close NOW!!!");
 	}
 
-	public void AdjustModelPositionOnExtendedTarcking()
+	public void AdjustScenePositionToPlayer()
 	{
-
+	
 	}
 }
