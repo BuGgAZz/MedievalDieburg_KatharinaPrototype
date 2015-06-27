@@ -7,7 +7,7 @@ using System.Collections;
 public class GPSBubble 
 {
 
-	public GameObject[] Scenes;
+	public GameObject Scene;
 
 	private string 	m_name;
 	private double 	m_longitude;
