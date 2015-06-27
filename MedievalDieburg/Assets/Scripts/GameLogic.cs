@@ -55,6 +55,7 @@ public class GameLogic : MonoBehaviour
 
 	}
 
+	// All Existing GPS bubbles for this apk will be instanciated here
 	private void registerGPSBubbles()
 	{
 		m_Bubbles 		= new GPSBubble[3];
@@ -70,6 +71,9 @@ public class GameLogic : MonoBehaviour
 		}
 	}
 
+	// Tracks the Player's GPS coordinates and Tests if the Player enters a bubble.
+	// If so, the active bubble will start projecting its AR content and adjust 
+	// it's contents position relative to the tracked player position
 	private void CheckPlayerPosition()
 	{
 		PlayerLat = Input.location.lastData.latitude;
@@ -106,6 +110,7 @@ public class GameLogic : MonoBehaviour
 		}
 	}
 
+	// subscribes UI elements to its variables
 	private void RegisterUICanvasElements()
 	{
 		InfoGPSBubble 	= GameObject.Find ("InfoGPSBubble").GetComponent<Text> ();
@@ -121,6 +126,8 @@ public class GameLogic : MonoBehaviour
 		InventoryItem1Text = GameObject.Find("InventoryItem1").GetComponentInChildren<Text>();
 	}
 
+
+	// Prints the available Infromation to its UI elemets
 	private void PrintInfo()
 	{
 		if (m_activeBubble!= null)
@@ -153,6 +160,9 @@ public class GameLogic : MonoBehaviour
 		}
 	}
 
+	// locates player in real space via GPS and translates its movements into Unity coordinates, then
+	// adjusts scene position according to the player's movement to simulate a static position of the 
+	// projected scene as the scene would normally move according to the device the device.	
 	public void AdjustScenePositionToPlayer(float playerGPSPosX, float playerGPSPosZ, GPSBubble activeBubble)
 	{
 		double 	scenePosXMin = activeBubble.Longitude - activeBubble.Radius;
