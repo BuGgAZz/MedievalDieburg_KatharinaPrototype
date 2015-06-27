@@ -18,6 +18,11 @@ public class GameLogic : MonoBehaviour
 	Text InfoInBubble;
 	Text InfoPosGarten;
 	Text InfoPosHof;
+	Text InventoryCounter;
+	Image InventoryItem0Image;
+	Image InventoryItem1Image;
+	Text InventoryItem0Text;
+	Text InventoryItem1Text;
 
 	public bool PlayerInBubble
 	{
@@ -45,6 +50,11 @@ public class GameLogic : MonoBehaviour
 		InfoInBubble 	= GameObject.Find ("InBubble").GetComponent<Text> ();
 		InfoPosGarten 	= GameObject.Find ("PosGarten").GetComponent<Text> ();
 		InfoPosHof		= GameObject.Find("PosHof").GetComponent<Text>();
+		InventoryCounter= GameObject.Find("InventoryCounter").GetComponent<Text>();
+		InventoryItem0Image = GameObject.Find("InventoryItem0").GetComponent<Image>();
+		InventoryItem1Image = GameObject.Find("InventoryItem1").GetComponent<Image>();
+		InventoryItem0Text = GameObject.Find("InventoryItem0").GetComponentInChildren<Text>();
+		InventoryItem1Text = GameObject.Find("InventoryItem1").GetComponentInChildren<Text>();
 	}
 
 	void Update()
@@ -84,12 +94,30 @@ public class GameLogic : MonoBehaviour
 
 	private void PrintInfo()
 	{
-		InfoGPSBubble.text 	= "Player in GPS Bubble: " + m_activeBubble; 
-		InfoLat.text 		= "Player Lat = " + PlayerLat;
-		InfoLng.text		= "Player Lng = " + PlayerLng;
-		InfoInBubble.text 	= "Player in Bubble = " + m_playerInBubble;
-		InfoPosGarten.text 	= "Garten:" + m_Bubbles [1].Latitude + " \n\t\t\t" + m_Bubbles [1].Longitude;
-		InfoPosHof.text 	= "Hof:\t" + m_Bubbles [2].Latitude + " \n\t\t" + m_Bubbles [2].Longitude;
+		InfoGPSBubble.text 	  = "Player in GPS Bubble: " + m_activeBubble; 
+		InfoLat.text 		  = "Player Lat = " + PlayerLat;
+		InfoLng.text		  = "Player Lng = " + PlayerLng;
+		InfoInBubble.text 	  = "Player in Bubble = " + m_playerInBubble;
+		InfoPosGarten.text 	  = "Garten:" + m_Bubbles [1].Latitude + " \n\t\t\t" + m_Bubbles [1].Longitude;
+		InfoPosHof.text 	  = "Hof:\t" + m_Bubbles [2].Latitude + " \n\t\t" + m_Bubbles [2].Longitude;
+		InventoryCounter.text = "Free inventory space"+Inventory.freeSpace.ToString();
+		
+		if(Inventory.Items.Count > 0)
+		{
+			for(int i = 0; i < Inventory.Items.Count; i++ )
+			{
+				if(i == 0)
+				{
+					InventoryItem0Image.overrideSprite =(Sprite)Inventory.Items[0].item_icon;
+					InventoryItem0Text.text = Inventory.Items[0].item_name;
+				}
+				if(i == 1)
+				{
+					InventoryItem1Image.overrideSprite = (Sprite)Inventory.Items[1].item_icon;
+					InventoryItem1Text.text = Inventory.Items[1].item_name;
+				}
+			}
+		}
 	}
 
 	public void QuitApp()
