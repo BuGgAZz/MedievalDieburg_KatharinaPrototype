@@ -1,18 +1,18 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System;
 using System.Collections;
 using Vuforia;
 
 public class GameLogic : MonoBehaviour
 {
-
-
 	public float PlayerLat;
 	public float PlayerLng;
 
 	private GPSBubble[] m_Bubbles;
 	private bool m_playerInBubble;
-	private string m_activeBubble;
+	private GPSBubble m_activeBubble;
+
 	Text InfoGPSBubble;
 	Text InfoLat;
 	Text InfoLng;
@@ -20,8 +20,8 @@ public class GameLogic : MonoBehaviour
 	Text InfoPosGarten;
 	Text InfoPosHof;
 	Text InventoryCounter;
-	Image InventoryItem0Image;
-	Image InventoryItem1Image;
+	UnityEngine.UI.Image InventoryItem0Image;
+	UnityEngine.UI.Image InventoryItem1Image;
 	Text InventoryItem0Text;
 	Text InventoryItem1Text;
 
@@ -33,7 +33,7 @@ public class GameLogic : MonoBehaviour
 		}
 	}
 
-	public string ActiveBubble
+	public GPSBubble ActiveBubble
 	{
 		get
 		{
@@ -44,7 +44,7 @@ public class GameLogic : MonoBehaviour
 	void Start () 
 	{
 		registerGPSBubbles ();
-		m_playerInBubble = true;
+		//m_playerInBubble = true;
 		RegisterUICanvasElements ();
 	}
 
@@ -52,13 +52,14 @@ public class GameLogic : MonoBehaviour
 	{
 		CheckPlayerPosition ();
 		PrintInfo ();
+
 	}
 
 	private void registerGPSBubbles()
 	{
 		m_Bubbles 		= new GPSBubble[3];
 		m_Bubbles [0] 	= new GPSBubble ("TestBubbleUni", 49.903020d, 8.858752d, 0f, 0.00002d);
-		m_Bubbles [1] 	= new GPSBubble ("Garten", 49.900476d, 8.845070d, 0f, 0.0002d);
+		m_Bubbles [1] 	= new GPSBubble ("Garten", 49.900476d, 8.845070d, 0f, 0.00005d);
 		m_Bubbles [2]	= new GPSBubble ("Hof", 49.900393d, 8.844850d, 0f, 0.00006d); 
 
 		foreach (GPSBubble bubble in m_Bubbles) 
@@ -79,7 +80,7 @@ public class GameLogic : MonoBehaviour
 			if((PlayerLat < bubble.Latitude + bubble.Radius && PlayerLat > bubble.Latitude - bubble.Radius) &&
 			   (PlayerLng < bubble.Longitude + bubble.Radius && PlayerLng > bubble.Longitude - bubble.Radius))
 			{
-				m_activeBubble = bubble.Name;
+				m_activeBubble = bubble;
 				m_playerInBubble = true;
 				break;
 			}
@@ -87,6 +88,21 @@ public class GameLogic : MonoBehaviour
 			{
 				m_playerInBubble = false;
 			}
+		}
+
+		if (m_playerInBubble) 
+		{
+			AdjustScenePositionToPlayer(Input.location.lastData.longitude,Input.location.lastData.latitude, ActiveBubble);
+			if(!ActiveBubble.IsActive)
+			{
+				ActiveBubble.IsActive = true;
+				EventManager.OnPlayerEnter(null, EventArgs.Empty);
+			}
+		} 
+		else if (ActiveBubble.IsActive)
+		{
+			EventManager.OnPlayerExit(null, EventArgs.Empty);
+			ActiveBubble.IsActive = false;
 		}
 	}
 
@@ -99,15 +115,19 @@ public class GameLogic : MonoBehaviour
 		InfoPosGarten 	= GameObject.Find ("PosGarten").GetComponent<Text> ();
 		InfoPosHof		= GameObject.Find("PosHof").GetComponent<Text>();
 		InventoryCounter= GameObject.Find("InventoryCounter").GetComponent<Text>();
-		InventoryItem0Image = GameObject.Find("InventoryItem0").GetComponent<Image>();
-		InventoryItem1Image = GameObject.Find("InventoryItem1").GetComponent<Image>();
+		InventoryItem0Image = GameObject.Find("InventoryItem0").GetComponent<UnityEngine.UI.Image>();
+		InventoryItem1Image = GameObject.Find("InventoryItem1").GetComponent<UnityEngine.UI.Image>();
 		InventoryItem0Text = GameObject.Find("InventoryItem0").GetComponentInChildren<Text>();
 		InventoryItem1Text = GameObject.Find("InventoryItem1").GetComponentInChildren<Text>();
 	}
 
 	private void PrintInfo()
 	{
-		InfoGPSBubble.text 	  = "Player in GPS Bubble: " + m_activeBubble; 
+		if (m_activeBubble!= null)
+			InfoGPSBubble.text 	  = "Player in GPS Bubble: " + m_activeBubble.Name; 
+		else
+			InfoGPSBubble.text 	  = "Player not in GPS Bubble" ;
+
 		InfoLat.text 		  = "Player Lat = " + PlayerLat;
 		InfoLng.text		  = "Player Lng = " + PlayerLng;
 		InfoInBubble.text 	  = "Player in Bubble = " + m_playerInBubble;
@@ -133,14 +153,54 @@ public class GameLogic : MonoBehaviour
 		}
 	}
 
+	public void AdjustScenePositionToPlayer(float playerGPSPosX, float playerGPSPosZ, GPSBubble activeBubble)
+	{
+		double 	scenePosXMin = activeBubble.Longitude - activeBubble.Radius;
+		double 	scenePosXMax = activeBubble.Longitude - activeBubble.Radius;
+		double 	scenePosZMin = activeBubble.Latitude - activeBubble.Radius;
+		double 	scenePosZMax = activeBubble.Latitude - activeBubble.Radius;
+		
+		float 	currentPlayerPosX;
+		float 	currentPlayerPosZ;
+		float 	newPlayerPosX;
+		float 	newPlayerPosZ;
+		float 	lastPlayerPosX = 0;
+		float 	lastPlayerPosZ  = 0;
+		float 	deltaPlayerPosX;
+		float 	deltaPlayerPosZ;
+
+		Debug.Log ( "LastPosX= " +lastPlayerPosX + " LastPosZ = " +lastPlayerPosZ);
+		//Translate GPS player coordinates into Unity Coordinates
+		currentPlayerPosX = MathF.Mapf(playerGPSPosX,(float)scenePosXMin,(float)scenePosXMax,-9,9) ;
+		currentPlayerPosZ = MathF.Mapf(playerGPSPosZ,(float)scenePosZMin,(float)scenePosZMax,-9,9) ;
+
+		//get travled distance on X and Z
+		if (lastPlayerPosX != 0 && lastPlayerPosZ != 0) 
+		{
+			deltaPlayerPosX = currentPlayerPosX - lastPlayerPosX;
+			deltaPlayerPosZ = currentPlayerPosZ - lastPlayerPosZ;
+		}
+		else 
+		{
+			lastPlayerPosX = currentPlayerPosX;
+			lastPlayerPosZ = currentPlayerPosZ;
+
+			deltaPlayerPosX = currentPlayerPosX - lastPlayerPosX;
+			deltaPlayerPosZ = currentPlayerPosZ - lastPlayerPosZ;
+		}
+				
+		lastPlayerPosX = currentPlayerPosX;
+		lastPlayerPosZ = currentPlayerPosZ;
+
+		// Move scene in the opposite direction of player to appear still in real space
+		newPlayerPosX = activeBubble.Scene.transform.position.x - deltaPlayerPosX;
+		newPlayerPosZ = activeBubble.Scene.transform.position.z - deltaPlayerPosZ;
+
+		activeBubble.Scene.transform.position = new Vector3 (newPlayerPosX, activeBubble.Scene.transform.position.y, newPlayerPosZ);
+	}
 
 	public void QuitApp()
 	{
 		Application.Quit ();
-	}
-
-	public void AdjustScenePositionToPlayer()
-	{
-	
 	}
 }
