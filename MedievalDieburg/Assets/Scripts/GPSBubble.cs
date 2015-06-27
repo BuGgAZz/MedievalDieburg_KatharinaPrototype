@@ -1,51 +1,100 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 
 
 public class GPSBubble 
 {
-	protected string Name;
-	protected float Longitude;
-	protected float Latitude;
-	protected float Altitude;
-	protected float Radius;
 
-	private bool m_PlayerInBubble;
+	public GameObject Scene;
+
+	private string 	m_name;
+	private double 	m_longitude;
+	private double 	m_latitude;
+	private float 	m_altitude;
+	private double 	m_radius;
+
+	private bool	m_playerInBubble;
+
+	#region Variablen Getter
+	public string Name
+	{
+		get
+		{
+			return m_name;
+		}
+	}
+
+	public double Longitude
+	{
+		get
+		{
+			return m_longitude;
+		}
+	}
+
+	public double Latitude
+	{
+		get
+		{
+			return m_latitude;
+		}
+	}
+
+	public float Altitude
+	{
+		get
+		{
+			return m_altitude;
+		}
+	}
+	public double Radius
+	{
+		get
+		{
+			return m_radius;
+		}
+	}
+	#endregion 
+
+	public GPSBubble(string name, double lat, double lng, float alt, double r)
+	{
+		m_name 		= 	name;
+		m_latitude 	=	lat;
+		m_longitude =	lng;
+		m_altitude 	=	alt;
+		m_radius 	= 	r;
+	}
+
+
+	private void OnEnable()
+	{
+		EventManager.PlayerEnter += ProjectScene;
+		EventManager.PlayerExit += StopProjectScene;
+	}
+
+	private void OnDisable()
+	{
+		EventManager.PlayerEnter -= ProjectScene;
+		EventManager.PlayerExit -= StopProjectScene;
+	}
 	
-	public GPSBubble(string name, float lng, float lat, float alt, float r)
+	private void DetermineProjectedScene()
 	{
-		Name 		= 	name;
-		Longitude 	=	lng;
-		Latitude 	=	lat;
-		Altitude 	=	alt;
-		Radius 		= 	r;
+		switch (m_name) 
+		{
+		case "Garten"	: /* GartenSceneLaden*/ ; break;
+		case "Hof" 		: /* HofSceneLaden*/	; break; 
+		}
 	}
 
-	void OnEnable()
-	{
-		EventManager.OnPlayerEnter 	+= 	ProjectScene;
-		EventManager.OnPlayerExit 	+=	StopProjectScene;
-	}
-
-	void OnDisable()
-	{
-		EventManager.OnPlayerEnter 	-= 	ProjectScene;
-		EventManager.OnPlayerExit 	-=	StopProjectScene;
-	}
-
-	void CkeckForPlayerCoordinates()
-	{
-		//Envoke OnPlayerEnter & OnPlayerExit here
-
-	}
-
-	void ProjectScene()
+	public static void ProjectScene(object sender, EventArgs e)
 	{
 
 	}
 
-	void StopProjectScene()
+	public static void StopProjectScene(object sender, EventArgs e)
 	{
 
 	}
